@@ -5,3 +5,10 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
+
+# Create Schools
+5.times do |i|
+  school_name = "School #{i + 1}"
+  School.create!(name: school_name)
+  puts "Created school: #{school_name}"
+end
