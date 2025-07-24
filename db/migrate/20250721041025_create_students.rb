@@ -8,10 +8,11 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.timestamps
     end
 
-    add_index :students, :email, unique: true
+    add_index :students, [:school_id, :email], unique: true
   end
 
   def down
+    remove_index :students, [:school_id, :email]
     drop_table :students
   end
 end
