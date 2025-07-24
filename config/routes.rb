@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
-  resources :schools
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  root "schools#index"
+
+  resources :schools, only: [:index] do
+    namespace :students do
+      get '/login', to: 'sessions#new'
+      post '/login', to: 'sessions#create'
+      delete '/logout', to: 'sessions#destroy'
+    end
+
+    resources :students, only: [:show]
+  end
+
 end

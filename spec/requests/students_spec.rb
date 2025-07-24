@@ -12,16 +12,20 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/schools", type: :request do
-  
+RSpec.describe "/students", type: :request do
+  let(:school) { create(:school) }
+  let(:student) { create(:student, school: school, password: 'securepass', password_confirmation: 'securepass') }
+
+  before do
+    post school_students_login_path(school), params: { email: student.email, password: 'securepass' }
+  end
   # This should return the minimal set of attributes required to create a valid
-  # School. As you add validations to School, be sure to
+  # Student. As you add validations to Student, be sure to
   # adjust the attributes here as well.
 
-  describe "GET /index" do
+  describe "GET /show" do
     it "renders a successful response" do
-      school = create(:school)
-      get schools_url
+      get school_student_path(school, student)
       expect(response).to be_successful
     end
   end

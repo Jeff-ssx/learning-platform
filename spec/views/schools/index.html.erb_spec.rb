@@ -1,20 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe "schools/index", type: :view do
-  before(:each) do
-    assign(:schools, [
-      School.create!(
-        name: "Name"
-      ),
-      School.create!(
-        name: "Name"
-      )
-    ])
-  end
 
-  it "renders a list of schools" do
+  let(:schools) {
+    [
+      create(:school, name: "School1"),
+      create(:school, name: "School2"),
+    ]
+  }
+
+  it "renders a list of schools with login links" do
+    assign(:schools, schools)
+
     render
-    cell_selector = 'div>p'
-    assert_select cell_selector, text: Regexp.new("Name".to_s), count: 2
+
+    expect(rendered).to include("School1")
+    expect(rendered).to include("School2")
+
+    schools.each do |school|
+      expect(rendered).to have_link(
+        "Login with this school",
+        href: school_students_login_path(school)
+      )
+    end
   end
 end

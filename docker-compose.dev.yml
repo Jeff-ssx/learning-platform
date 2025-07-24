@@ -1,0 +1,9 @@
+version: '3.9'
+
+services:
+  web:
+    environment:
+      RAILS_ENV: development
+      DATABASE_NAME: myapp_development
+    depends_on:
+      - db

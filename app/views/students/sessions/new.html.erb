@@ -1,0 +1,19 @@
+<h1>Student Login - <%= @school.name %></h1>
+
+<%= form_with url: school_students_login_path(@school), method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :email %><br>
+    <%= form.text_field :email %>
+  </div>
+
+  <div>
+    <%= form.label :password %><br>
+    <%= form.password_field :password %>
+  </div>
+
+  <div>
+    <%= form.submit "Login" %>
+  </div>
+<% end %>
+
+<%= link_to 'back to schools', root_path %>
