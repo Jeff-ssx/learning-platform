@@ -13,5 +13,8 @@ RUN bundle install
 # Copy the rest of the app
 COPY . .
 
+# Expose port
+EXPOSE 3000
+
 # Start server
 CMD ["rails", "server", "-b", "0.0.0.0"]

@@ -4,11 +4,9 @@
 
 <div id="schools">
   <% @schools.each do |school| %>
-    <%= render school %>
+    <%= school.name %>
     <p>
-      <%= link_to "Show this school", school %>
+      <%= link_to "Login with this school", school_students_login_path(school) %>
     </p>
   <% end %>
 </div>
-
-<%= link_to "New school", new_school_path %>

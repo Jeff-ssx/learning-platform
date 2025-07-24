@@ -2,9 +2,6 @@ version: '3.9'
 
 services:
   web:
-    command: bundle exec rspec
     environment:
       RAILS_ENV: test
-      DATABASE_NAME: myapp_test
-    depends_on:
-      - db
+      DATABASE_URL: postgres://postgres:password@db:5432/myapp_test

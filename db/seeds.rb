@@ -7,8 +7,23 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Create Schools
+puts "Creating schools..."
 5.times do |i|
   school_name = "School #{i + 1}"
   School.create!(name: school_name)
   puts "Created school: #{school_name}"
+end
+
+# Create Students
+puts "Creating students..."
+School.find_each do |school|
+  2.times do |i|
+    Student.create!(
+      name: "Student#{i + 1} - #{school.name}",
+      email: "student#{i + 1}_#{school.id}@example.com",
+      password: "Password123",
+      school: school
+    )
+    puts "Created student: student#{i + 1}_#{school.id}@example.com"
+  end
 end
