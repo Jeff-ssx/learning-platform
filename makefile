@@ -4,8 +4,11 @@ dev-up-build:
 dev-up:
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 
+test-build:
+	docker compose -f docker-compose.test.yml build
+
 test-all:
-	docker compose -f docker-compose.yml -f docker-compose.test.yml run --rm web rspec
+	docker compose -f docker-compose.test.yml run --rm test
 
 db-reset-dev:
 	docker compose run --rm -e PGDATABASE=postgres web rake db:drop db:create db:migrate

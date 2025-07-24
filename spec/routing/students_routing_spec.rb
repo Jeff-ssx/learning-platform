@@ -1,38 +1,31 @@
 require "rails_helper"
 
-RSpec.describe StudentsController, type: :routing do
+RSpec.describe Students::SessionsController, type: :routing do
+  let(:school_id) { 1 }
+
   describe "routing" do
-    it "routes to #index" do
-      expect(get: "/students").to route_to("students#index")
+    it "routes to GET /schools/:school_id/students/login" do
+      expect(get: "/schools/#{school_id}/students/login").to route_to(
+        controller: "students/sessions",
+        action: 'new',
+        school_id: school_id.to_s
+        )
     end
 
-    it "routes to #new" do
-      expect(get: "/students/new").to route_to("students#new")
+    it "routes to POST /schools/:school_id/students/login" do
+      expect(post: "/schools/#{school_id}/students/login").to route_to(
+        controller: "students/sessions",
+        action: 'create',
+        school_id: school_id.to_s
+        )
     end
 
-    it "routes to #show" do
-      expect(get: "/students/1").to route_to("students#show", id: "1")
-    end
-
-    it "routes to #edit" do
-      expect(get: "/students/1/edit").to route_to("students#edit", id: "1")
-    end
-
-
-    it "routes to #create" do
-      expect(post: "/students").to route_to("students#create")
-    end
-
-    it "routes to #update via PUT" do
-      expect(put: "/students/1").to route_to("students#update", id: "1")
-    end
-
-    it "routes to #update via PATCH" do
-      expect(patch: "/students/1").to route_to("students#update", id: "1")
-    end
-
-    it "routes to #destroy" do
-      expect(delete: "/students/1").to route_to("students#destroy", id: "1")
+    it "routes to DELETE /schools/:school_id/students/logout" do
+      expect(delete: "/schools/#{school_id}/students/logout").to route_to(
+        controller: "students/sessions",
+        action: 'destroy',
+        school_id: school_id.to_s
+        )
     end
   end
 end

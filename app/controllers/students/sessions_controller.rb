@@ -14,7 +14,6 @@ module Students
         session[:student_id] = @student.id
         redirect_to school_student_path(@school, @student)
       else
-        flash.now[:alert] = "Invalid login"
         render :new
       end
     end

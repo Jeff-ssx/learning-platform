@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_student!
-    redirect_to students_login_path unless current_student
+    redirect_to school_students_login_path(@school) unless current_student
   end
 
   private
