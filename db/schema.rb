@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_21_041025) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_24_054033) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,5 +31,29 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_21_041025) do
     t.index ["school_id"], name: "index_students_on_school_id"
   end
 
+  create_table "term_accesses", force: :cascade do |t|
+    t.bigint "student_id", null: false
+    t.bigint "term_id", null: false
+    t.integer "payment_method", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_method"], name: "index_term_accesses_on_payment_method"
+    t.index ["student_id", "term_id"], name: "index_term_accesses_on_student_id_and_term_id", unique: true
+    t.index ["student_id"], name: "index_term_accesses_on_student_id"
+    t.index ["term_id"], name: "index_term_accesses_on_term_id"
+  end
+
+  create_table "terms", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id", "name"], name: "index_terms_on_school_id_and_name", unique: true
+    t.index ["school_id"], name: "index_terms_on_school_id"
+  end
+
   add_foreign_key "students", "schools"
+  add_foreign_key "term_accesses", "students"
+  add_foreign_key "term_accesses", "terms"
+  add_foreign_key "terms", "schools"
 end

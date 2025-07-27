@@ -1,3 +1,9 @@
 <p style="color: green"><%= notice %></p>
 
 <%= render @student %>
+
+<h2>Accessible Terms</h2>
+<%= render_term_list(@student, @accessible_terms) %>
+
+<h2>Available Terms</h2>
+<%= render_term_list(@student, @available_terms) %>

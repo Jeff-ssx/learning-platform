@@ -2,37 +2,15 @@ require "rails_helper"
 
 RSpec.describe TermsController, type: :routing do
   describe "routing" do
-    it "routes to #index" do
-      expect(get: "/terms").to route_to("terms#index")
-    end
-
-    it "routes to #new" do
-      expect(get: "/terms/new").to route_to("terms#new")
-    end
-
     it "routes to #show" do
-      expect(get: "/terms/1").to route_to("terms#show", id: "1")
+      expect(get: "/schools/1/students/2/terms/3").to route_to(
+        controller: 'terms',
+        action: 'show',
+        school_id: '1',
+        student_id: '2',
+        id: '3'
+      )
     end
 
-    it "routes to #edit" do
-      expect(get: "/terms/1/edit").to route_to("terms#edit", id: "1")
-    end
-
-
-    it "routes to #create" do
-      expect(post: "/terms").to route_to("terms#create")
-    end
-
-    it "routes to #update via PUT" do
-      expect(put: "/terms/1").to route_to("terms#update", id: "1")
-    end
-
-    it "routes to #update via PATCH" do
-      expect(patch: "/terms/1").to route_to("terms#update", id: "1")
-    end
-
-    it "routes to #destroy" do
-      expect(delete: "/terms/1").to route_to("terms#destroy", id: "1")
-    end
   end
 end

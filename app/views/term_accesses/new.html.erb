@@ -1,0 +1,12 @@
+<h1>New term access</h1>
+<div class="student">
+  <h2><%= @student.name %></h2>
+  <p>School: <%= @student.school.name %></p>
+  <p>Term: <%= @term.name %></p>
+</div>
+
+<%= render "form", term_access: @term_access %>
+<br>
+<div>
+  <%= link_to "Back to terms", school_student_path(@term.school, @student) %>
+</div>

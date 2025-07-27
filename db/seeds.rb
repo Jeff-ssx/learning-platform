@@ -27,3 +27,15 @@ School.find_each do |school|
     puts "Created student: student#{i + 1}_#{school.id}@example.com"
   end
 end
+
+# Create Terms
+puts "Creating terms..."
+School.find_each do |school|
+  5.times do |i|
+    Term.create!(
+      name: "#{school.name} - Term#{i + 1}",
+      school: school
+    )
+    puts "Created term: #{school.name} - Term#{i + 1}"
+  end
+end

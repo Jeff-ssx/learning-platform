@@ -3,8 +3,9 @@
 <%= render @term %>
 
 <div>
-  <%= link_to "Edit this term", edit_term_path(@term) %> |
-  <%= link_to "Back to terms", terms_path %>
+  <%= link_to "Back to terms", school_student_path(@term.school, @student) %>
 
-  <%= button_to "Destroy this term", @term, method: :delete %>
+  <% unless @student.terms.include?(@term) %>
+    <%= button_to  "Grant Access", new_school_student_term_term_access_path(@term.school, @student, @term), method: :get %>
+  <% end %>
 </div>
