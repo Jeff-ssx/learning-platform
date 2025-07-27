@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   root "schools#index"
 
   resources :schools, only: [:index] do
@@ -9,7 +8,10 @@ Rails.application.routes.draw do
       delete '/logout', to: 'sessions#destroy'
     end
 
-    resources :students, only: [:show]
+    resources :students, only: [:show] do
+      resources :terms, only: [:index, :show] do
+        resources :term_accesses, only: [:new, :create]
+      end
+    end
   end
-
 end

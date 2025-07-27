@@ -1,5 +1,7 @@
 module Students
   class SessionsController < ApplicationController
+    include SetSchoolAndStudent
+    
     before_action :set_school, only: %i[ new create ]
     before_action :set_student, only: %i[ create ]
 
@@ -25,15 +27,6 @@ module Students
     end
 
     private
-
-    def set_school
-      @school = School.find(school_id_params)
-      raise ActiveRecord::RecordNotFound, "School not found" unless @school
-    end
-
-    def school_id_params
-      params.require(:school_id)
-    end
 
     def set_student
       @student = @school.students.find_by(email: email_params)

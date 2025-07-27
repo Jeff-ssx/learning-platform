@@ -14,20 +14,54 @@ require 'rails_helper'
 
 RSpec.describe "/students", type: :request do
   let(:school) { create(:school) }
-  let(:student) { create(:student, school: school, password: 'securepass', password_confirmation: 'securepass') }
+  let(:student) { create(:student, school: school) }
+  let!(:term1) { create(:term, school: school) }
+  let!(:term2) { create(:term, school: school) }
 
-  before do
-    post school_students_login_path(school), params: { email: student.email, password: 'securepass' }
-  end
-  # This should return the minimal set of attributes required to create a valid
-  # Student. As you add validations to Student, be sure to
-  # adjust the attributes here as well.
+  describe "GET /schools/:school_id/students/:id" do
+    context "when student is authenticated" do
+      before do
+        create(:term_access, student: student, term: term1)
+        student.reload
+        school.reload
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      get school_student_path(school, student)
-      expect(response).to be_successful
+        post school_students_login_path(school), params: { email: student.email, password: student.password }
+        get school_student_path(school_id: school.id, id: student.id)
+      end
+
+      it "returns http success" do
+        expect(response).to have_http_status(:success)
+      end
+
+      it "assigns accessible terms" do
+        expect(assigns(:accessible_terms)).to include(term1)
+      end
+
+      it "assigns available terms" do
+        expect(assigns(:available_terms)).to include(term2)
+      end
+    end
+
+    context "when student is not authenticated" do
+      it "redirects to login page" do
+        get school_student_path(school_id: school.id, id: student.id)
+        expect(response).to redirect_to(school_students_login_path)
+      end
+    end
+
+    context "when accessing another student’s page" do
+      let!(:other_student) do
+        create(:student, school: school)
+      end
+
+      before do
+        post school_students_login_path(school), params: { email: other_student.email, password: other_student.password }
+      end
+
+      it "redirect to root" do
+        get school_student_path(school_id: school.id, id: student.id)
+        expect(response).to redirect_to(root_path)
+      end
     end
   end
-
 end
