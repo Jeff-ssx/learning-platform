@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_24_054033) do
     t.bigint "school_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_students_on_email", unique: true
+    t.index ["school_id", "email"], name: "index_students_on_school_id_and_email", unique: true
     t.index ["school_id"], name: "index_students_on_school_id"
   end
 

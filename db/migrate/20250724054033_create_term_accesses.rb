@@ -14,7 +14,7 @@ class CreateTermAccesses < ActiveRecord::Migration[7.0]
   end
 
   def down
-    remove_index :term_accesses, [:course_id, :term_id]
+    remove_index :term_accesses, [:student_id, :term_id]
     remove_index :term_accesses, :payment_method
 
     drop_table :term_accesses
