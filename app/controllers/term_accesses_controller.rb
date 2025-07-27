@@ -30,11 +30,6 @@ class TermAccessesController < ApplicationController
   end
 
   private
-    # Only allow a list of trusted parameters through.
-    def term_params
-      params.fetch(:term, {})
-    end
-
     def set_term
       @term = @school.terms.find(term_id)
     end

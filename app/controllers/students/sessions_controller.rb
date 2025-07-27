@@ -12,7 +12,7 @@ module Students
 
     # POST /login
     def create
-      if @student&.authenticate(params[:password])
+      if @student&.authenticate(password_params)
         session[:student_id] = @student.id
         redirect_to school_student_path(@school, @student)
       else
