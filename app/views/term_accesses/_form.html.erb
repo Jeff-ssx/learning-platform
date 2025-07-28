@@ -1,17 +1,23 @@
+<h3>Pay with License</h3>
 <%= form_with(model: [@school, @student, @term, @term_access]) do |form| %>
-  <% if term_access.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(term_access.errors.count, "error") %> prohibited this term_access from being saved:</h2>
-
-      <ul>
-        <% term_access.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= form.hidden_field :payment_method, value: 'license' %>
 
   <div>
-    <%= form.submit %>
+    <%= form.label :license_code, 'License Code' %><br>
+    <%= form.text_field :license_code %>
   </div>
+
+  <%= form.submit 'Pay with License' %>
+<% end %>
+
+<h3>Pay with Credit Card</h3>
+<%= form_with(model: [@school, @student, @term, @term_access]) do |form| %>
+  <%= form.hidden_field :payment_method, value: 'credit_card' %>
+
+  <div>
+    <%= form.label :credit_card_num, 'Credit Card Number' %><br>
+    <%= form.text_field :credit_card_num %>
+  </div>
+
+  <%= form.submit 'Pay with Credit Card' %>
 <% end %>

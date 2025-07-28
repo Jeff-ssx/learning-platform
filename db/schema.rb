@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_27_181312) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_28_070620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -31,6 +31,18 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_27_181312) do
     t.datetime "updated_at", null: false
     t.index ["term_id", "name"], name: "index_courses_on_term_id_and_name", unique: true
     t.index ["term_id"], name: "index_courses_on_term_id"
+  end
+
+  create_table "licenses", force: :cascade do |t|
+    t.string "code", null: false
+    t.bigint "term_id"
+    t.bigint "student_id"
+    t.string "status", default: "unused", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_licenses_on_code"
+    t.index ["student_id"], name: "index_licenses_on_student_id"
+    t.index ["term_id"], name: "index_licenses_on_term_id"
   end
 
   create_table "schools", force: :cascade do |t|
@@ -74,6 +86,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_27_181312) do
   add_foreign_key "course_enrollments", "courses"
   add_foreign_key "course_enrollments", "students"
   add_foreign_key "courses", "terms"
+  add_foreign_key "licenses", "students"
+  add_foreign_key "licenses", "terms"
   add_foreign_key "students", "schools"
   add_foreign_key "term_accesses", "students"
   add_foreign_key "term_accesses", "terms"

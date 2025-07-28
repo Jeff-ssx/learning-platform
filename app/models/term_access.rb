@@ -1,5 +1,5 @@
 class TermAccess < ApplicationRecord
-  enum payment_method: [:licience, :credit_card]
+  enum payment_method: [:license, :credit_card]
 
   belongs_to :student
   belongs_to :term

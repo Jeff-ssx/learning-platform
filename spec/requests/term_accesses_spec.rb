@@ -20,6 +20,7 @@ RSpec.describe "/term_access", type: :request do
   let(:school) { create(:school) }
   let(:student) { create(:student, school: school)}
   let(:term) { create(:term, school: school) }
+  let(:term_access) { TermAccess.new }
 
 
   before do
@@ -37,12 +38,42 @@ RSpec.describe "/term_access", type: :request do
     context 'when term access build success' do
       before do
         allow(TermAccessBuilder).to receive(:new).and_return(
-          instance_double(TermAccessBuilder, call: true)
+          instance_double(TermAccessBuilder, call: true, term_access: term_access)
         )
       end
 
+      it "builds TermAccessBuilder with correct context for license" do
+        expected_context = { license_code: 'ABC123' }
+        expect(TermAccessBuilder).to receive(:new).with(
+          student: student,
+          term: term,
+          payment_method: 'license',
+          context: expected_context
+        ).and_return(instance_double(TermAccessBuilder, call: true, term_access: term_access))
+
+        post school_student_term_term_accesses_path(school, student, term), params: {
+          term_access: { payment_method: 'license', license_code: 'ABC123' }
+        }
+      end
+
+      it "builds TermAccessBuilder with correct context for credit_card_num" do
+        expected_context = { credit_card_num: 'ABC123' }
+        expect(TermAccessBuilder).to receive(:new).with(
+          student: student,
+          term: term,
+          payment_method: 'credit_card',
+          context: expected_context
+        ).and_return(instance_double(TermAccessBuilder, call: true, term_access: term_access))
+
+        post school_student_term_term_accesses_path(school, student, term), params: {
+          term_access: { payment_method: 'credit_card', credit_card_num: 'ABC123' }
+        }
+      end
+
       it "redirect to student show page" do
-        post school_student_term_term_accesses_path(school, student, term)
+        post school_student_term_term_accesses_path(school, student, term), params: {
+          term_access: { payment_method: 'credit_card', credit_card_num: '1234' }
+        }
         expect(response).to redirect_to(school_student_path(school, student))
       end
     end
@@ -50,14 +81,15 @@ RSpec.describe "/term_access", type: :request do
     context 'when term access build failed' do
       before do
         allow(TermAccessBuilder).to receive(:new).and_return(
-          instance_double(TermAccessBuilder, call: false)
+          instance_double(TermAccessBuilder, call: false, term_access: term_access)
         )
       end
       it "renders a new page" do
-        post school_student_term_term_accesses_path(school, student, term)
+        post school_student_term_term_accesses_path(school, student, term), params: {
+          term_access: { payment_method: 'credit_card', credit_card_num: '1234' }
+        }
         expect(response).to render_template(:new)
       end
     end
   end
-
 end
