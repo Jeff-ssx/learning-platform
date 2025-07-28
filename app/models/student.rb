@@ -5,6 +5,9 @@ class Student < ApplicationRecord
     has_many :term_accesses, dependent: :destroy
     has_many :terms, through: :term_accesses
 
+    has_many :course_enrollments, dependent: :destroy
+    has_many :courses, through: :course_enrollments
+
     validates :name, presence: true
     validates :school, presence: true
     validates :email, presence: true, uniqueness: true

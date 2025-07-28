@@ -1,0 +1,14 @@
+<h1>New course enrollment</h1>
+<div class="student">
+  <h2><%= @student.name %></h2>
+  <p>School: <%= @student.school.name %></p>
+  <p>Term: <%= @course.term.name %></p>
+  <p>Course: <%= @course.name %></p>
+</div>
+<%= render "form", course_enrollment: @course_enrollment %>
+
+<br>
+
+<div>
+  <%= link_to "Back to courses", school_student_term_path(@student.school, @student, @course.term) %>
+</div>

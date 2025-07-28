@@ -4,6 +4,8 @@ class Term < ApplicationRecord
     has_many :term_accesses, dependent: :destroy
     has_many :students, through: :term_accesses
 
+    has_many :courses
+
     validates :school, presence: true
     validates :name, presence: true, uniqueness: { scope: :school_id }
 end
