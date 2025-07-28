@@ -69,6 +69,20 @@ RSpec.describe "/term_access", type: :request do
           term_access: { payment_method: 'credit_card', credit_card_num: 'ABC123' }
         }
       end
+      
+      it "builds TermAccessBuilder with context for invalid method" do
+        expected_context = {}
+        expect(TermAccessBuilder).to receive(:new).with(
+          student: student,
+          term: term,
+          payment_method: 'invalid',
+          context: expected_context
+        ).and_return(instance_double(TermAccessBuilder, call: true, term_access: term_access))
+
+        post school_student_term_term_accesses_path(school, student, term), params: {
+          term_access: { payment_method: 'invalid', credit_card_num: 'ABC123' }
+        }
+      end
 
       it "redirect to student show page" do
         post school_student_term_term_accesses_path(school, student, term), params: {

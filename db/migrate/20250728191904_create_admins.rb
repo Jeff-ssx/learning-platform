@@ -1,0 +1,18 @@
+class CreateAdmins < ActiveRecord::Migration[7.0]
+  def up
+    create_table :admins do |t|
+      t.string :name, null: false
+      t.string :email, null: false
+      t.string :password_digest, null: false
+      t.references :school, null: false, foreign_key: true
+      t.timestamps
+    end
+
+    add_index :admins, [:school_id, :email], unique: true
+  end
+
+  def down
+    remove_index :admins, [:school_id, :email]
+    drop_table :admins
+  end
+end

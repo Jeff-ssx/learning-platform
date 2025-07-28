@@ -28,6 +28,20 @@ School.find_each do |school|
   end
 end
 
+# Create Admins
+puts "Creating admin..."
+School.find_each do |school|
+  2.times do |i|
+    Admin.create!(
+      name: "Admin#{i + 1} - #{school.name}",
+      email: "admin#{i + 1}_#{school.id}@example.com",
+      password: "Password123",
+      school: school
+    )
+    puts "Created admin: admin#{i + 1}_#{school.id}@example.com"
+  end
+end
+
 # Create Terms
 puts "Creating terms..."
 School.find_each do |school|

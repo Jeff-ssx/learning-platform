@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  include Pundit
+  include Pundit::Authorization
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
@@ -8,19 +8,27 @@ class ApplicationController < ActionController::Base
     @current_student ||= Student.find_by(id: session[:student_id]) if session[:student_id]
   end
 
+  def current_admin
+    @current_admin ||= Admin.find_by(id: session[:admin_id]) if session[:admin_id]
+  end
+
   def current_user
-    current_student
+    current_student || current_admin
   end
 
   def authenticate_student!
     redirect_to school_students_login_path(@school) unless current_student
   end
 
+  def authenticate_admin!
+    redirect_to school_admins_login_path(@school) unless current_admin
+  end
+
   private
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."
-    redirect_to(request.referer || root_path)
+    redirect_to(root_path)
   end
 
   def render_not_found
