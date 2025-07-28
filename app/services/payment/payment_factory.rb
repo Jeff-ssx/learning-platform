@@ -3,7 +3,7 @@ module Payment
 
         PROCESSORS = {
             'license' => LicensePaymentProcessor,
-            'credit' => CreditCardPaymentProcessor
+            'credit_card' => CreditCardPaymentProcessor
         }.freeze
 
         def self.build(type:, term:, student:, context: {})

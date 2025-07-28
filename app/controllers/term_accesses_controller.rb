@@ -11,24 +11,33 @@ class TermAccessesController < ApplicationController
   end
 
   # POST /term_accesses
-  def create
-    @term_access = TermAccess.new(term_access_params)
-  
+  def create  
+    payment_method = params[:term_access][:payment_method]
+
+    context = case payment_method
+              when 'license'
+                { license_code: params[:term_access][:license_code] }
+              when 'credit_card'
+                { credit_card_num: params[:term_access][:credit_card_num] }
+              else
+                {}
+              end
+
     builder = TermAccessBuilder.new(
       student: @student,
       term: @term,
-      payment_method: @term_access.payment_method,
-      license_code: @term_access.license_code
+      payment_method: payment_method,
+      context: context
     )
 
     if builder.call
       redirect_to school_student_path(@school, @student)
     else
       # Re-use @term_access with errors from builder to re-render form
-     @term_access = builder.term_access
+     @term_access = builder.term_access || TermAccess.new
       render :new, status: :unprocessable_entity
     end
-end
+  end
 
   private
     def set_term

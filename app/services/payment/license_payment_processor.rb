@@ -9,7 +9,7 @@ module Payment
         end
 
         def process!
-            return false if license.nil? || license.term !=  term
+            return false if license.nil? || license.term != term
 
             license.activate!(student)
         end

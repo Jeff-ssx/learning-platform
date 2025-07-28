@@ -33,6 +33,6 @@ class TermAccessBuilder
             end
         end
 
-        term_access.persisted?
+        term_access&.persisted? || false
     end
 end

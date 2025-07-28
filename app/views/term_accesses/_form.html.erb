@@ -1,5 +1,5 @@
 <h3>Pay with License</h3>
-<%= form_with(model: [@school, @student, @term, @term_access], url: school_student_term_term_accesses_path, local: true) do |form| %>
+<%= form_with(model: [@school, @student, @term, @term_access]) do |form| %>
   <%= form.hidden_field :payment_method, value: 'license' %>
 
   <div>
@@ -11,7 +11,7 @@
 <% end %>
 
 <h3>Pay with Credit Card</h3>
-<%= form_with(model: [@school, @student, @term, @term_access], url: school_student_term_term_accesses_path, local: true) do |form| %>
+<%= form_with(model: [@school, @student, @term, @term_access]) do |form| %>
   <%= form.hidden_field :payment_method, value: 'credit_card' %>
 
   <div>
