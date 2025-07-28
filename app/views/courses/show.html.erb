@@ -3,7 +3,7 @@
 <%= render @course %>
 
 <div> 
-  <% unless @student.courses.include?(@term) %>
+  <% unless @student.courses.include?(@course) %>
     <%= button_to  "Enroll Course", new_school_student_term_course_course_enrollment_path(@course.term.school, @student, @course.term, @course), method: :get %>
   <% end %>
 
