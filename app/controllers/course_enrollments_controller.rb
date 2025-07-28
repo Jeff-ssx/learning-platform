@@ -1,70 +1,45 @@
 class CourseEnrollmentsController < ApplicationController
-  before_action :set_course_enrollment, only: %i[ show edit update destroy ]
-
-  # GET /course_enrollments or /course_enrollments.json
-  def index
-    @course_enrollments = CourseEnrollment.all
-  end
-
-  # GET /course_enrollments/1 or /course_enrollments/1.json
-  def show
-  end
+  include SetSchoolAndStudent
+  before_action :set_school
+  before_action :set_student
+  before_action :set_course, only: [:new, :create]
+  before_action :set_term, only: [:new, :create]
+  before_action :authenticate_student!
 
   # GET /course_enrollments/new
   def new
     @course_enrollment = CourseEnrollment.new
   end
 
-  # GET /course_enrollments/1/edit
-  def edit
-  end
 
   # POST /course_enrollments or /course_enrollments.json
   def create
-    @course_enrollment = CourseEnrollment.new(course_enrollment_params)
 
-    respond_to do |format|
-      if @course_enrollment.save
-        format.html { redirect_to @course_enrollment, notice: "Course enrollment was successfully created." }
-        format.json { render :show, status: :created, location: @course_enrollment }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @course_enrollment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+    builder = CourseEnrollmentBuilder.new(
+        student: @student,
+        course: @course
+    )
 
-  # PATCH/PUT /course_enrollments/1 or /course_enrollments/1.json
-  def update
-    respond_to do |format|
-      if @course_enrollment.update(course_enrollment_params)
-        format.html { redirect_to @course_enrollment, notice: "Course enrollment was successfully updated." }
-        format.json { render :show, status: :ok, location: @course_enrollment }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @course_enrollment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /course_enrollments/1 or /course_enrollments/1.json
-  def destroy
-    @course_enrollment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to course_enrollments_path, status: :see_other, notice: "Course enrollment was successfully destroyed." }
-      format.json { head :no_content }
+    if builder.call
+        # success
+        redirect_to school_student_term_path(@school, @student, @course.term)
+    else
+        # fail
+        @course_enrollment = CourseEnrollment.new
+        render :new
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_course_enrollment
-      @course_enrollment = CourseEnrollment.find(params[:id])
+    def set_term
+      @term = @course.term
     end
 
-    # Only allow a list of trusted parameters through.
-    def course_enrollment_params
-      params.fetch(:course_enrollment, {})
+    def set_course
+      @course = Course.find(course_id)
+    end
+
+    def course_id
+      params.require(:course_id)
     end
 end

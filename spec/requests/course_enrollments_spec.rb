@@ -13,123 +13,52 @@ require 'rails_helper'
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/course_enrollments", type: :request do
-  
+
   # This should return the minimal set of attributes required to create a valid
   # CourseEnrollment. As you add validations to CourseEnrollment, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  let(:school) { create(:school) }
+  let(:student) { create(:student, school: school) }
+  let(:term) { create(:term, school: school) }
+  let(:course) { create(:course, term: term) }
 
-  describe "GET /index" do
-    it "renders a successful response" do
-      CourseEnrollment.create! valid_attributes
-      get course_enrollments_url
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /show" do
-    it "renders a successful response" do
-      course_enrollment = CourseEnrollment.create! valid_attributes
-      get course_enrollment_url(course_enrollment)
-      expect(response).to be_successful
-    end
+  before do
+    post school_students_login_path(school), params: { email: student.email, password: student.password }
   end
 
   describe "GET /new" do
     it "renders a successful response" do
-      get new_course_enrollment_url
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET /edit" do
-    it "renders a successful response" do
-      course_enrollment = CourseEnrollment.create! valid_attributes
-      get edit_course_enrollment_url(course_enrollment)
+      get new_school_student_term_course_course_enrollment_path(school, student, term, course)
       expect(response).to be_successful
     end
   end
 
   describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new CourseEnrollment" do
-        expect {
-          post course_enrollments_url, params: { course_enrollment: valid_attributes }
-        }.to change(CourseEnrollment, :count).by(1)
+    context 'when Course enrollment build success' do
+      before do
+        allow(CourseEnrollmentBuilder).to receive(:new).and_return(
+          instance_double(CourseEnrollmentBuilder, call: true)
+        )
       end
 
-      it "redirects to the created course_enrollment" do
-        post course_enrollments_url, params: { course_enrollment: valid_attributes }
-        expect(response).to redirect_to(course_enrollment_url(CourseEnrollment.last))
+      it "redirect to student show page" do
+        post school_student_term_course_course_enrollments_path(school, student, term, course)
+        expect(response).to redirect_to(school_student_term_path(school, student, term))
       end
     end
 
-    context "with invalid parameters" do
-      it "does not create a new CourseEnrollment" do
-        expect {
-          post course_enrollments_url, params: { course_enrollment: invalid_attributes }
-        }.to change(CourseEnrollment, :count).by(0)
+    context 'when term access build failed' do
+      before do
+        allow(CourseEnrollmentBuilder).to receive(:new).and_return(
+          instance_double(CourseEnrollmentBuilder, call: false)
+        )
       end
-
-    
-      it "renders a response with 422 status (i.e. to display the 'new' template)" do
-        post course_enrollments_url, params: { course_enrollment: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
+      it "renders a new page" do
+        post school_student_term_course_course_enrollments_path(school, student, term, course)
+        expect(response).to render_template(:new)
       end
-    
     end
   end
 
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested course_enrollment" do
-        course_enrollment = CourseEnrollment.create! valid_attributes
-        patch course_enrollment_url(course_enrollment), params: { course_enrollment: new_attributes }
-        course_enrollment.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "redirects to the course_enrollment" do
-        course_enrollment = CourseEnrollment.create! valid_attributes
-        patch course_enrollment_url(course_enrollment), params: { course_enrollment: new_attributes }
-        course_enrollment.reload
-        expect(response).to redirect_to(course_enrollment_url(course_enrollment))
-      end
-    end
-
-    context "with invalid parameters" do
-    
-      it "renders a response with 422 status (i.e. to display the 'edit' template)" do
-        course_enrollment = CourseEnrollment.create! valid_attributes
-        patch course_enrollment_url(course_enrollment), params: { course_enrollment: invalid_attributes }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    
-    end
-  end
-
-  describe "DELETE /destroy" do
-    it "destroys the requested course_enrollment" do
-      course_enrollment = CourseEnrollment.create! valid_attributes
-      expect {
-        delete course_enrollment_url(course_enrollment)
-      }.to change(CourseEnrollment, :count).by(-1)
-    end
-
-    it "redirects to the course_enrollments list" do
-      course_enrollment = CourseEnrollment.create! valid_attributes
-      delete course_enrollment_url(course_enrollment)
-      expect(response).to redirect_to(course_enrollments_url)
-    end
-  end
 end

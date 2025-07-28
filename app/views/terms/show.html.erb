@@ -2,6 +2,13 @@
 
 <%= render @term %>
 
+<h2>Accessible Courses</h2>
+<%= render_course_list(@student, @accessible_courses) %>
+
+<h2>Available Courses</h2>
+<%= render_course_list(@student, @available_courses) %>
+
+
 <div>
   <%= link_to "Back to terms", school_student_path(@term.school, @student) %>
 

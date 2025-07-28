@@ -39,3 +39,15 @@ School.find_each do |school|
     puts "Created term: #{school.name} - Term#{i + 1}"
   end
 end
+
+# Create Courses
+puts "Creating courses..."
+Term.find_each do |term|
+  5.times do |i|
+    Course.create!(
+      name: "#{term.name} - Course#{i + 1}",
+      term: term
+    )
+    puts "Created Course: #{term.name} - Course#{i + 1}"
+  end
+end

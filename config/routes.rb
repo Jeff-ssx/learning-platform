@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  resources :course_enrollments
-  resources :courses
   root "schools#index"
 
   resources :schools, only: [:index] do
@@ -13,6 +11,9 @@ Rails.application.routes.draw do
     resources :students, only: [:show] do
       resources :terms, only: [:index, :show] do
         resources :term_accesses, only: [:new, :create]
+        resources :courses, only: [:index, :show] do
+          resources :course_enrollments, only: [:new, :create]
+        end
       end
     end
   end

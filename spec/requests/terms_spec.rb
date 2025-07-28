@@ -17,13 +17,35 @@ RSpec.describe "/terms", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Term. As you add validations to Term, be sure to
   # adjust the attributes here as well.
-  let(:term) { create(:term) }
+  let(:school) { create(:school) }
+  let(:student) { create(:student, school: school) }
+  let(:term) { create(:term, school: school) }
+
+  let!(:course_1) { create(:course, term: term) }
+  let!(:course_2) { create(:course, term: term) }
 
   describe "GET /show" do
-    it "renders a successful response" do
+    before do 
+      create(:term_access, student: student, term: term)
+      create(:course_enrollment, student: student, course: course_1)
+      student.reload
+      school.reload
+      term.reload
+
       post school_students_login_path(school), params: { email: student.email, password: student.password }
-      get term_url(term)
-      expect(response).to be_successful
+      get school_student_term_path(school, student, term)
+    end
+
+    it "returns http success" do
+      expect(response).to have_http_status(:success)
+    end
+
+    it "assigns accessible terms" do
+      expect(assigns(:accessible_courses)).to include(course_1)
+    end
+
+    it "assigns available terms" do
+      expect(assigns(:available_courses)).to include(course_2)
     end
   end
 
