@@ -19,13 +19,21 @@ docker-compose version 1.29.2
 1. Build docker images
 
 ```
+bundle install
 docker compose build
 ```
 
-2. Start Application
+2. Setup database
+```
+make db-reset-dev
+make bash
+rake db:seed
+```
+
+3. Start Application
 
 ```
-docker compose up
+make dev-up
 ```
 * issues :Not supported URL scheme http+docke from docker-compose up
   * Try to run `DOCKER_HOST=unix:///var/run/docker.sock` berfore running commands
