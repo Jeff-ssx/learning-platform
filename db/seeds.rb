@@ -51,3 +51,15 @@ Term.find_each do |term|
     puts "Created Course: #{term.name} - Course#{i + 1}"
   end
 end
+
+# Create Licenses
+puts "Creating Licenses..."
+Term.find_each do |term|
+  5.times do |i|
+    License.create!(
+      code: "#{term.name} - Licenses#{i + 1}",
+      term: term
+    )
+    puts "Created Licenses: #{term.name} - Licenses#{i + 1}"
+  end
+end
