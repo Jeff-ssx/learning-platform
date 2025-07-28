@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe Student, type: :model do
+RSpec.describe Admin, type: :model do
   describe 'associations' do 
     it { should belong_to(:school)}
   end
 
   describe 'validations' do
-    subject { FactoryBot.build(:student) }
+    subject { build(:admin) }
 
     it { should validate_presence_of(:name) }
 
@@ -14,9 +14,9 @@ RSpec.describe Student, type: :model do
     it { should validate_uniqueness_of(:email) }
 
     it 'should validate password length on create' do 
-      student = build(:student, password: '123', password_confirmation: '123')
-      expect(student).not_to be_valid
-      expect(student.errors[:password]).to include("is too short (minimum is 6 characters)")
+      admin = build(:admin, password: '123', password_confirmation: '123')
+      expect(admin).not_to be_valid
+      expect(admin.errors[:password]).to include("is too short (minimum is 6 characters)")
     end
   end
 end

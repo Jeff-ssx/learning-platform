@@ -1,0 +1,23 @@
+<p style="color: green"><%= notice %></p>
+
+<h1><%= @school.name %> Dashboard</h1>
+
+<h2>Students Enrolled per Course</h2>
+<ul>
+  <% @students_per_course.each do |(course_id, course_name), count| %>
+    <li><%= course_name %>: <%= count %> students</li>
+  <% end %>
+</ul>
+
+<h2>Students Enrolled per Term</h2>
+<ul>
+  <% @students_per_term.each do |(term_id, term_name), count| %>
+    <li><%= term_name %>: <%= count %> students</li>
+  <% end %>
+</ul>
+
+<h2>Enrollment by Payment Method</h2>
+<ul>
+  <li>Credit Card: <%= @credit_card_enrollments %></li>
+  <li>License: <%= @license_enrollments %></li>
+</ul>
